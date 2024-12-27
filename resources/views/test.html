@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biology Key Concepts</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f8ff;
+        }
+
+        #presentation-container {
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            position: relative;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            box-sizing: border-box;
+            display: none;
+            animation: fadeIn 0.5s;
+            text-align: center;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .navigation {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .slide h2 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .slide p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 800px;
+            height: 5px;
+            background: #ddd;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .progress {
+            height: 100%;
+            background: #4CAF50;
+            width: 10%;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 600px) {
+            #presentation-container {
+                height: 400px;
+            }
+
+            .slide {
+                padding: 20px;
+            }
+
+            .slide h2 {
+                font-size: 20px;
+            }
+
+            .slide p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="presentation-container">
+        <div class="slide active">
+            <h2>1. Cell Theory</h2>
+            <p>All living things are made up of cells, cells are the basic unit of structure and function in living things, and all cells arise from pre-existing cells.</p>
+        </div>
+        <div class="slide">
+            <h2>2. Evolution</h2>
+            <p>Changes in species over time through natural selection and genetic drift. Organisms that are better adapted to their environment tend to survive and produce more offspring.</p>
+        </div>
+        <div class="slide">
+            <h2>3. Genetics</h2>
+            <p>DNA carries hereditary information, genes control traits, and genetic information is passed from parents to offspring through reproduction.</p>
+        </div>
+        <div class="slide">
+            <h2>4. Homeostasis</h2>
+            <p>Living organisms maintain internal stability through various feedback mechanisms to survive in changing environments.</p>
+        </div>
+        <div class="slide">
+            <h2>5. Energy Flow</h2>
+            <p>Energy flows through ecosystems, starting with photosynthesis in plants and moving through food chains and food webs.</p>
+        </div>
+        <div class="slide">
+            <h2>6. Structure and Function</h2>
+            <p>The structure of biological systems is directly related to their function, from molecular to ecosystem levels.</p>
+        </div>
+        <div class="slide">
+            <h2>7. Information Flow</h2>
+            <p>Biological systems communicate and regulate through signal transmission, from nerve impulses to hormonal signals.</p>
+        </div>
+        <div class="slide">
+            <h2>8. Reproduction</h2>
+            <p>All living things reproduce, either sexually or asexually, passing genetic information to the next generation.</p>
+        </div>
+        <div class="slide">
+            <h2>9. Growth and Development</h2>
+            <p>Organisms grow and develop following specific patterns controlled by genes and environmental factors.</p>
+        </div>
+        <div class="slide">
+            <h2>10. Interdependence</h2>
+            <p>Living things depend on each other and their environment. No organism exists in isolation.</p>
+        </div>
+    </div>
+    <div class="navigation">
+        <button onclick="changeSlide(-1)">Previous</button>
+        <button onclick="changeSlide(1)">Next</button>
+    </div>
+    <div class="progress-bar">
+        <div class="progress"></div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.querySelector('.progress');
+
+        function updateSlide() {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide].classList.add('active');
+            progressBar.style.width = `${(currentSlide + 1) * 10}%`;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+            updateSlide();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        setInterval(() => {
+            // Auto-advance every 10 seconds
+            changeSlide(1);
+        }, 10000);
+    </script>
+</body>
+</html>
