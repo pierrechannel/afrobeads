@@ -155,12 +155,12 @@
                         <div class="cart-item list-group-item py-3">
                             <div class="row align-items-center">
                                 <div class="col-md-2">
-                                    <img src="${item.image || 'assets/img/card1.jpg'}" alt="${item.name}"
+                                    <img src="${item.image || 'assets/img/card.jpg'}" alt="${item.name}"
                                          class="product-image rounded">
                                 </div>
                                 <div class="col-md-4">
                                     <h5 class="mb-1">${item.name}</h5>
-                                    <p class="text-muted mb-0">Price: $${item.price.toFixed(2)}</p>
+                                    <p class="text-muted mb-0">Price: $${item.price}</p>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="input-group">
@@ -173,7 +173,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2 text-end">
-                                    <h5 class="mb-0">$${itemTotal.toFixed(2)}</h5>
+                                    <h5 class="mb-0">$${itemTotal}</h5>
                                 </div>
                                 <div class="col-md-1 text-end">
                                     <button class="btn btn-link text-danger remove-item p-0" data-id="${item.id}">
@@ -186,7 +186,7 @@
             }
 
             $('#cart-items').html(cartHtml);
-            $('#cartTotal, #subtotal').text(`$${total.toFixed(2)}`);
+            $('#cartTotal, #subtotal').text(`$${total}`);
         }
 
         // Update Quantity

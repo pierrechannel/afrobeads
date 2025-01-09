@@ -455,7 +455,7 @@ $(document).ready(function() {
                 <div class="col-md-4 col-sm-6">
                     <div class="card product-card" data-product-id="${product.id}">
                         <div class="product-image-wrapper">
-                            <img src="${product.image || '/placeholder.jpg'}"
+                            <img src="${product.image || '/30.jpg'}"
                                  alt="${product.name}"
                                  class="product-image"
                                  onerror="this.src='/placeholder.jpg'">
@@ -472,7 +472,7 @@ $(document).ready(function() {
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <div class="price-wrapper">
                                     ${product.originalPrice ? `
-                                        <span class="price-original">$${product.originalPrice.toFixed(2)}</span>` : ''}
+                                        <span class="price-original">$${product.originalPrice}</span>` : ''}
                                     <span class="price-current">$${product.price}</span>
                                 </div>
                                 <span class="badge ${product.stock > 0 ? 'bg-success' : 'bg-danger'} stock-badge">
@@ -634,9 +634,9 @@ $(document).ready(function() {
     // Show product modal
     function showProductModal(product) {
         $('#modalProductName').text(product.name);
-        $('#modalProductImage').attr('src', product.image || '/placeholder.jpg');
+        $('#modalProductImage').attr('src', product.image || '/30.jpg');
         $('#modalProductDescription').text(product.description);
-        $('#modalProductPrice').text(`$${product.price.toFixed(2)}`);
+        $('#modalProductPrice').text(`$${product.price}`);
         $('#modalProductStock')
             .text(product.stock > 0 ? 'In Stock' : 'Out of Stock')
             .removeClass('bg-success bg-danger')
@@ -713,6 +713,7 @@ $(document).ready(function() {
         setTimeout(() => {
             toastElement.remove();
         }, 3000);
+        alert(message);
     }
 
     // Update product count display

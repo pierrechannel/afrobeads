@@ -285,18 +285,10 @@
         // Add to Cart
         $('#add-to-cart-btn').click(function() {
             console.log('Product added to cart!');
+            alert('Product added to cart!');
 
             // SweetAlert for adding to cart
-            Swal.fire({
-                icon: 'success',
-                title: 'Added to Cart',
-                text: 'The product has been added to your cart!',
-                confirmButtonText: 'Continue Shopping'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#productModal').modal('hide');
-                }
-            });
+
         });
     });
 </script>

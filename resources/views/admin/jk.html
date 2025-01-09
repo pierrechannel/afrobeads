@@ -1,0 +1,348 @@
+@extends('layouts.app')
+
+@section('content')
+    <div class="container mt-4">
+        <section class="section dashboard">
+            <div class="row">
+
+                <!-- Left side columns -->
+                <div class="col-lg-8">
+                    <div class="row">
+                        <!-- Sales Card -->
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card sales-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Sales <span>| This Month</span></h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-cart"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6 id="totalSales">Loading...</h6>
+                                            <span id="salesChange" class="text-success small pt-1 fw-bold">Loading...</span>
+                                            <span class="text-muted small pt-2 ps-1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Revenue Card -->
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card revenue-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Revenue <span>| This Month</span></h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6 id="totalRevenue">Loading...</h6>
+                                            <span id="revenueChange" class="text-success small pt-1 fw-bold">Loading...</span>
+                                            <span class="text-muted small pt-2 ps-1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Expenses Card -->
+                        <div class="col-xxl-4 col-xl-12">
+                            <div class="card info-card expenses-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Expenses <span>| This Month</span></h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-exchange"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6 id="totalExpenses">Loading...</h6>
+                                            <span id="expensesChange" class="text-danger small pt-1 fw-bold">Loading...</span>
+                                            <span class="text-muted small pt-2 ps-1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Sales -->
+                        <div class="col-12">
+                            <div class="card recent-sales overflow-auto">
+                                <div class="card-body">
+                                    <h5 class="card-title">Recent Sales <span>| Today</span></h5>
+                                    <table class="table table-borderless datatable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Customer</th>
+                                                <th scope="col">Product</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentSalesBody">
+                                            <!-- Recent sales will be injected here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top Selling Products -->
+                        <div class="col-12">
+                            <div class="card top-selling overflow-auto">
+                                <div class="card-body pb-0">
+                                    <h5 class="card-title">Top Selling Products <span>| This Month</span></h5>
+                                    <table class="table table-borderless" id="topProductsTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Product</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Sold</th>
+                                                <th scope="col">Revenue</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="topProductsBody">
+                                            <!-- Top products will be injected here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sales Trends -->
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sales Trends <span>| Last 30 Days</span></h5>
+                                    <div id="salesTrendChart" style="min-height: 400px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right side columns -->
+                <div class="col-lg-4">
+                    <!-- Debts Overview -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Debts Overview <span>| Current</span></h5>
+                            <div class="activity">
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">Total Debt</div>
+                                    <div class="activity-content">
+                                        <strong id="totalDebt">Loading...</strong>
+                                    </div>
+                                </div>
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">Outstanding</div>
+                                    <div class="activity-content">
+                                        <strong id="outstandingDebt">Loading...</strong>
+                                    </div>
+                                </div>
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">Paid</div>
+                                    <div class="activity-content">
+                                        <strong id="paidDebt">Loading...</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Customers -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Top Customers <span>| This Month</span></h5>
+                            <ul class="list-group" id="topCustomersBody">
+                                <!-- Top customers will be injected here -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Status -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Inventory Status</h5>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Stock</th>
+                                        <th>Reorder Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryStatusBody">
+                                    <!-- Inventory status will be injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Expense Categories -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Expense Categories <span>| This Month</span></h5>
+                            <div id="expenseCategoriesChart" style="min-height: 400px;" class="echart"></div>
+                        </div>
+                    </div>
+
+                    <!-- Low Stock Alerts -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Low Stock Alerts</h5>
+                            <ul class="list-group" id="lowStockBody">
+                                <!-- Low stock alerts will be injected here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            loadDashboardData();
+
+            function loadDashboardData() {
+                $.ajax({
+                    url: '/api/dashboard', // Define the endpoint for fetching dashboard data
+                    method: 'GET',
+                    success: function(data) {
+                        $('#totalSales').text('$' + Number(data.totalSales).toFixed(2));
+                        $('#totalRevenue').text('$' + Number(data.totalRevenue).toFixed(2));
+                        $('#totalExpenses').text('$' + Number(data.totalExpenses).toFixed(2));
+                        $('#totalDebt').text('$' + Number(data.totalDebt).toFixed(2));
+                        $('#outstandingDebt').text('$' + Number(data.outstandingDebt).toFixed(2));
+                        $('#paidDebt').text('$' + Number(data.paidDebt).toFixed(2));
+
+                        // Populate recent sales
+                        let recentSalesHtml = '';
+                        data.recentSales.forEach(sale => {
+                            recentSalesHtml += `
+                                <tr>
+                                    <th scope="row"><a href="#">#${sale.id}</a></th>
+                                    <td>${sale.customer.name}</td>
+                                    <td><a href="#" class="text-primary">${sale.product.name}</a></td>
+                                    <td>$${Number(sale.total_price).toFixed(2)}</td>
+                                    <td><span class="badge ${sale.status === 'Paid' ? 'bg-success' : 'bg-warning'}">${sale.status}</span></td>
+                                </tr>
+                            `;
+                        });
+                        $('#recentSalesBody').html(recentSalesHtml);
+
+                        // Populate top products
+                        let topProductsHtml = '';
+                        data.topProducts.forEach(product => {
+                            topProductsHtml += `
+                                <tr>
+                                    <td><a href="#" class="text-primary fw-bold">${product.name}</a></td>
+                                    <td>$${Number(product.price).toFixed(2)}</td>
+                                    <td class="fw-bold">${product.sold}</td>
+                                    <td>$${Number(product.revenue).toFixed(2)}</td>
+                                </tr>
+                            `;
+                        });
+                        $('#topProductsBody').html(topProductsHtml);
+
+                        // Populate top customers
+                        let topCustomersHtml = '';
+                        data.topCustomers.forEach(customer => {
+                            topCustomersHtml += `<li class="list-group-item">${customer.name} <span class="badge bg-success">Top Client</span></li>`;
+                        });
+                        $('#topCustomersBody').html(topCustomersHtml);
+
+                        // Populate inventory status
+                        let inventoryStatusHtml = '';
+                        data.inventoryStatus.forEach(stock => {
+                            inventoryStatusHtml += `
+                                <tr>
+                                    <td>${stock.product.name}</td>
+                                    <td>${stock.quantity}</td>
+                                    <td>${stock.reorder_level}</td>
+                                </tr>
+                            `;
+                        });
+                        $('#inventoryStatusBody').html(inventoryStatusHtml);
+
+                        // Populate low stock alerts
+                        let lowStockHtml = '';
+                        data.lowStockAlerts.forEach(alert => {
+                            lowStockHtml += `
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    ${alert.product.name}
+                                    <span class="badge ${alert.stock <= alert.reorder_level ? 'bg-danger' : 'bg-warning'} rounded-pill">${alert.stock} left</span>
+                                </li>
+                            `;
+                        });
+                        $('#lowStockBody').html(lowStockHtml);
+
+                        // Populate charts
+                        renderExpenseChart(data.expenseCategories);
+                        renderSalesTrendChart(data.salesTrend);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                        alert('Error loading dashboard data.');
+                    }
+                });
+            }
+
+            function renderExpenseChart(expenseData) {
+                echarts.init(document.querySelector("#expenseCategoriesChart")).setOption({
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        top: '5%',
+                        left: 'center'
+                    },
+                    series: [{
+                        name: 'Expense Categories',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: '18',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: expenseData // Expecting [{value: 1048, name: 'Operational'}, ...]
+                    }]
+                });
+            }
+
+            function renderSalesTrendChart(salesTrend) {
+                echarts.init(document.querySelector("#salesTrendChart")).setOption({
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: salesTrend.map(item => item.date) // Expecting [{date: '2023-09-01', sales: 1200}, ...]
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        name: 'Sales',
+                        type: 'line',
+                        data: salesTrend.map(item => item.sales), // Sales data
+                        smooth: true
+                    }]
+                });
+            }
+        });
+    </script>
+@endsection

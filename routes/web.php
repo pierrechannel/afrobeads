@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use app\http\Controllers\DealsController;
-use app\http\Controllers\DashboardController;
+//use app\http\Controllers\DashboardController;
 //use app\http\Controllers\admin\UsersController;
 
 
@@ -16,16 +16,26 @@ use app\http\Controllers\DashboardController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+use App\Http\Controllers\DashboardController;
+
+Route::get('/dashboard', [DashboardController::class, 'index']);
 
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/admin', [DashboardController::class, 'index'])->name('dashboard');
+//Route::get('/admin', [DashboardController::class, 'index'])->name('dashboard');
 
+//Route::get('/admin', function () {
 
+    //return view('admin.dashboard');
+//});
 Route::get('/shop', function () {
     return view('shop');
 });
+Route::get('/test', function () {
+    return "Test route working!";
+});
+
 
 
 Route::get('/cart', function () {

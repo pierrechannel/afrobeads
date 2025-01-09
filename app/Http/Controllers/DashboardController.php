@@ -3,17 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use app\Illuminate\Http\Response;
+// Remove or correct the response if not used.
+// use Illuminate\Http\Response; // Add this line if you intend to use Response
 
 class DashboardController extends Controller
 {
-/*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * Display the admin dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-/******  239c39c1-dc5f-43f4-9554-7c9214c9286c  *******/
     public function index()
     {
         // Fetch data for the dashboard cards and recent orders
