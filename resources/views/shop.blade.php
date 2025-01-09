@@ -452,7 +452,7 @@ $(document).ready(function() {
         products.forEach(product => {
             const discount = calculateDiscount(product.price, product.originalPrice);
             html += `
-                <div class="col-md-3 col-sm-4">
+                <div class="col-md-4 col-sm-6">
                     <div class="card product-card" data-product-id="${product.id}">
                         <div class="product-image-wrapper">
                             <img src="${product.image || '/30.jpg'}"

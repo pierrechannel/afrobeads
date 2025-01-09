@@ -23,3 +23,13 @@ Route::apiResource('products', ProductController::class);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+use App\Http\Controllers\Api\CartController;
+
+// API Routes for Cart
+//Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('api.cart.add');
+    Route::get('/cart', [CartController::class, 'getCart'])->name('api.cart.index');
+    Route::post('/cart/update', [CartController::class, 'updateCart'])->name('api.cart.update');
+    Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('api.cart.remove');
+//});
