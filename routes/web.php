@@ -23,6 +23,12 @@ Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/product', function () {
+    return view('product');
+});
+Route::get('/product_details', function () {
+    return view('product_details');
+});
 //Route::get('/admin', [DashboardController::class, 'index'])->name('dashboard');
 
 //Route::get('/admin', function () {

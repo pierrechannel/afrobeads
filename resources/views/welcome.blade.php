@@ -25,6 +25,9 @@
 @endsection
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <section class="hero-section" style="height: 500px; overflow: hidden;">
     <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" style="height: 100%;">
         <div class="carousel-indicators">
@@ -35,7 +38,7 @@
         <div class="carousel-inner" style="height: 100%;">
             <!-- Slide 1 -->
             <div class="carousel-item active" style="height: 100%;">
-                <img src="tomato.jpg" class="d-block w-100" alt="Sale Banner" style="height: 100%; object-fit: cover;">
+                <img src="assets\img\banner-image-2.jpg" class="d-block w-100" alt="Sale Banner" style="height: 100%; object-fit: cover;">
                 <div class="carousel-caption text-start">
                     <h1 class="display-4 fw-bold">Summer Sale</h1>
                     <p class="lead">Up to 70% off on selected items</p>
@@ -44,7 +47,7 @@
             </div>
             <!-- Slide 2 -->
             <div class="carousel-item" style="height: 100%;">
-                <img src="tomato.jpg" class="d-block w-100" alt="Sale Banner" style="height: 100%; object-fit: cover;">
+                <img src="assets\img\banner-image-2.jpg" class="d-block w-100" alt="Sale Banner" style="height: 100%; object-fit: cover;">
                 <div class="carousel-caption text-start">
                     <h1 class="display-4 fw-bold">Fall Collection</h1>
                     <p class="lead">New arrivals just for you</p>
@@ -53,7 +56,7 @@
             </div>
             <!-- Slide 3 -->
             <div class="carousel-item" style="height: 100%;">
-                <img src="tomato.jpg" class="d-block w-100" alt="Sale Banner" style="height: 100%; object-fit: cover;">
+                <img src="assets\img\banner-image-2.jpg" class="d-block w-100" alt="Sale Banner" style="height: 100%; object-fit: cover;">
                 <div class="carousel-caption text-start">
                     <h1 class="display-4 fw-bold">Winter Clearance</h1>
                     <p class="lead">Additional discounts on winter gear</p>

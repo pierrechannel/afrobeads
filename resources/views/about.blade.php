@@ -3,6 +3,9 @@
 @section('title', 'About Us')
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <div class="container py-5">
     <h1 class="text-center mb-4 display-4 font-weight-bold">About Us</h1>
     <p class="lead text-center" style="font-size: 1.5rem;">Welcome to our universe! We are an enthusiastic team committed to delivering extraordinary products and services that empower our clients and foster enduring relationships.</p>

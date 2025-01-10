@@ -455,10 +455,10 @@ $(document).ready(function() {
                 <div class="col-md-4 col-sm-6">
                     <div class="card product-card" data-product-id="${product.id}">
                         <div class="product-image-wrapper">
-                            <img src="${product.image || '/30.jpg'}"
+                            <img src="${product.image || 'assets/img/product.png'}"
                                  alt="${product.name}"
                                  class="product-image"
-                                 onerror="this.src='/placeholder.jpg'">
+                                 onerror="this.src='assets/img/product.png'">
                             <button class="wishlist-btn" data-product-id="${product.id}">
                                 <i class="bi bi-heart${product.isWishlisted ? '-fill' : ''}"></i>
                             </button>
@@ -634,7 +634,7 @@ $(document).ready(function() {
     // Show product modal
     function showProductModal(product) {
         $('#modalProductName').text(product.name);
-        $('#modalProductImage').attr('src', product.image || '/30.jpg');
+        $('#modalProductImage').attr('src', product.image || 'assets/img/product.png');
         $('#modalProductDescription').text(product.description);
         $('#modalProductPrice').text(`$${product.price}`);
         $('#modalProductStock')
