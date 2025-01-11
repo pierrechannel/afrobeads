@@ -18,6 +18,7 @@ use app\http\Controllers\DealsController;
 */
 use App\Http\Controllers\DashboardController;
 
+
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
 Route::get('/', function () {
@@ -25,6 +26,9 @@ Route::get('/', function () {
 });
 Route::get('/product', function () {
     return view('product');
+});
+Route::get('admin/product', function () {
+    return view('admin.product');
 });
 Route::get('/product_details', function () {
     return view('product_details');

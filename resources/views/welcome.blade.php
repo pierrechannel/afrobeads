@@ -1,143 +1,205 @@
 @extends('layouts.app')
 
-@section('title', 'Home')
-
-@section('custom-styles')
-<style>
-    .hero-section { height: 100%; background-size: cover; }
-    .loading-indicator {
-        display: none;
-        text-align: center;
-        margin: 20px 0;
-    }
-    .hero-section {
-        height: 500px; /* Set your desired height */
-        overflow: hidden; /* Keep it clean if content overflows */
-    }
-    .carousel-inner, .carousel-item {
-        height: 100%; /* Make sure carousel takes up full height */
-    }
-    .carousel-item img {
-        height: 100%;
-        object-fit: cover; /* Maintain aspect ratio */
-    }
-</style>
-@endsection
+@section('title', 'African Marketplace')
 
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    :root {
+        --primary-color: #D4AF37;
+        --accent-color: #8B4513;
+        --text-dark: #2C1810;
+    }
 
-<section class="hero-section" style="height: 500px; overflow: hidden;">
-    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" style="height: 100%;">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    .hero-section {
+        height: 100%;
+        background-size: cover;
+        position: relative;
+        color: #fff;
+    }
+
+    .hero-section img {
+        object-fit: cover;
+    }
+
+    .category-card {
+        transition: transform 0.3s ease;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-card .badge {
+        background-color: var(--primary-color);
+    }
+
+    .testimonial-section {
+        background-color: #FDF5E6;
+        border-top: 5px solid var(--primary-color);
+    }
+
+    .newsletter-section {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('assets/img/african-fabric.jpg');
+        background-size: cover;
+        color: white;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="assets/img/banner-image-2.jpg" class="d-block w-100 h-100" alt="African Marketplace">
+                <div class="carousel-caption text-start">
+                    <h1 class="display-3 fw-bold">Discover Africa's Finest</h1>
+                    <p class="lead">Authentic African products crafted with tradition and love</p>
+                    <a href="/products" class="btn btn-warning btn-lg px-4">Explore Collections</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="assets/img/banner-image-2.jpg" class="d-block w-100 h-100" alt="African Artisans">
+                <div class="carousel-caption text-start">
+                    <h1 class="display-3 fw-bold">Support African Artisans</h1>
+                    <p class="lead">Each purchase empowers local craftspeople</p>
+                    <a href="/artisans" class="btn btn-warning btn-lg px-4">Meet Our Artisans</a>
+                </div>
+            </div>
         </div>
-        <div class="carousel-inner" style="height: 100%;">
-            <!-- Slide 1 -->
-            <div class="carousel-item active" style="height: 100%;">
-                <img src="assets\img\banner-image-2.jpg" class="d-block w-100" alt="Sale Banner" style="height: 100%; object-fit: cover;">
-                <div class="carousel-caption text-start">
-                    <h1 class="display-4 fw-bold">Summer Sale</h1>
-                    <p class="lead">Up to 70% off on selected items</p>
-                    <a href="/products" class="btn btn-primary btn-lg">Shop Now</a>
-                </div>
-            </div>
-            <!-- Slide 2 -->
-            <div class="carousel-item" style="height: 100%;">
-                <img src="assets\img\banner-image-2.jpg" class="d-block w-100" alt="Sale Banner" style="height: 100%; object-fit: cover;">
-                <div class="carousel-caption text-start">
-                    <h1 class="display-4 fw-bold">Fall Collection</h1>
-                    <p class="lead">New arrivals just for you</p>
-                    <a href="/products" class="btn btn-primary btn-lg">Discover More</a>
-                </div>
-            </div>
-            <!-- Slide 3 -->
-            <div class="carousel-item" style="height: 100%;">
-                <img src="assets\img\banner-image-2.jpg" class="d-block w-100" alt="Sale Banner" style="height: 100%; object-fit: cover;">
-                <div class="carousel-caption text-start">
-                    <h1 class="display-4 fw-bold">Winter Clearance</h1>
-                    <p class="lead">Additional discounts on winter gear</p>
-                    <a href="/products" class="btn btn-primary btn-lg">Shop Winter Deals</a>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev" aria-label="Previous Slide">
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon"></span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next" aria-label="Next Slide">
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon"></span>
         </button>
     </div>
 </section>
 
 <!-- Featured Categories -->
-<div class="container my-5">
-    <h2 class="text-center mb-4">Featured Categories</h2>
-    <div class="row g-4" id="category-list"></div>
-    <div class="loading-indicator" id="loading-categories">Loading categories...</div>
-</div>
-
-<!-- Products Section -->
-<div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Featured Products</h2>
-        <div class="dropdown">
-            <button class="btn btn-outline-dark dropdown-toggle" id="sort-dropdown-toggle" data-bs-toggle="dropdown">
-                Sort by
-            </button>
-            <ul class="dropdown-menu" id="sort-options">
-                <li><a class="dropdown-item" data-sort="latest" href="#">Latest</a></li>
-                <li><a class="dropdown-item" data-sort="low_to_high" href="#">Price: Low to High</a></li>
-                <li><a class="dropdown-item" data-sort="high_to_low" href="#">Price: High to Low</a></li>
-            </ul>
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4 display-6">Explore African Heritage</h2>
+        <div class="row g-4" id="category-list">
+            <!-- Categories will be dynamically loaded -->
         </div>
     </div>
-    <div class="row g-4" id="product-list"></div>
-    <div class="loading-indicator" id="loading-products">Loading products...</div>
-</div>
+</section>
 
-<!-- Customer Testimonials -->
+<!-- Featured Products -->
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="text-center mb-4">What Our Customers Say</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="display-6">Featured Products</h2>
+            <div class="dropdown">
+                <button class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown">
+                    Sort by
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" data-sort="traditional" href="#">Traditional</a></li>
+                    <li><a class="dropdown-item" data-sort="modern" href="#">Modern</a></li>
+                    <li><a class="dropdown-item" data-sort="price" href="#">Price</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row g-4" id="product-list">
+            <!-- Products will be dynamically loaded -->
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Testimonials -->
+<section class="testimonial-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 display-6">What Our Customers Are Saying</h2>
         <div class="row">
-            <div class="col-md-4 text-center">
-                <blockquote class="blockquote">
-                    <p class="mb-0">"I absolutely love the selection of products! The quality is outstanding."</p>
-                    <br><footer class="blockquote-footer">Jane D.</footer>
-                </blockquote>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <img src="assets\img\customer.jpg" class="rounded-circle mb-3" width="80" height="80" alt="Customer">
+                        <p class="mb-3">"The quality of African craftsmanship is unmatched. These products bring warmth to my home!"</p>
+                        <footer class="text-muted">- Amara K., Kenya</footer>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 text-center">
-                <blockquote class="blockquote">
-                    <p class="mb-0">"The customer service is top-notch. I had a great shopping experience!"</p>
-                    <br><footer class="blockquote-footer">Mark R.</footer>
-                </blockquote>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <img src="assets\img\customer.jpg" class="rounded-circle mb-3" width="80" height="80" alt="Customer">
+                        <p class="mb-3">"I love the story behind each product. It's like bringing a piece of Africa into my home!"</p>
+                        <footer class="text-muted">- David A., South Africa</footer>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 text-center">
-                <blockquote class="blockquote">
-                    <p class="mb-0">"Fast shipping and great deals! I return to shop here again and again."</p>
-                    <br><footer class="blockquote-footer">Lisa M.</footer>
-                </blockquote>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <img src="assets\img\customer.jpg" class="rounded-circle mb-3" width="80" height="80" alt="Customer">
+                        <p class="mb-3">"Shopping here supports artisans, and the products are truly unique!"</p>
+                        <footer class="text-muted">- Fatima S., Nigeria</footer>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Newsletter -->
+<!-- Cultural Impact Section -->
 <section class="py-5">
     <div class="container">
-        <div class="row justify-content-center bg-light">
-            <div class="col-md-8 text-center ">
-                <h2>Subscribe to Our Newsletter</h2>
-                <p class="text-muted">Get updates about new products and special offers</p>
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="display-6">Preserving African Heritage</h2>
+                <p class="lead">Each product tells a story of tradition, craftsmanship, and cultural heritage.</p>
+                <div class="d-flex gap-3 mt-4">
+                    <div class="text-center">
+                        <h3 class="h2 text-warning">1000+</h3>
+                        <p>Artisans</p>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="h2 text-warning">25+</h3>
+                        <p>Countries</p>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="h2 text-warning">50K+</h3>
+                        <p>Products</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <img src="assets\img\thumb-avocado.png" class="img-fluid rounded-3" alt="African Craftsman">
+            </div>
+        </div>
+    </div>
+</section>
+<!-- New Arrivals -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4 display-6">New Arrivals</h2>
+        <div class="row g-4" id="new-arrivals-list">
+            <!-- New arrivals will be dynamically loaded -->
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter-section py-5 text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="display-6 mb-4">Join Our Community</h2>
+                <p class="lead mb-4">Subscribe to receive updates about new artisans, products, and African cultural insights</p>
                 <form class="row g-3 justify-content-center">
                     <div class="col-md-8">
                         <div class="input-group">
                             <input type="email" class="form-control" placeholder="Enter your email" required>
-                            <button class="btn btn-dark" type="submit">Subscribe</button>
+                            <button class="btn btn-warning px-4" type="submit">Subscribe</button>
                         </div>
                     </div>
                 </form>
@@ -146,152 +208,123 @@
     </div>
 </section>
 
-<!-- Product Details Modal -->
-<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel">Product Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="product-modal-body">
-                <!-- Product details will be injected here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button id="add-to-cart-btn" class="btn btn-dark">Add to Cart</button>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
-
-@section('custom-scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.1.9/sweetalert2.all.min.js"></script>
-
 <script>
     $(document).ready(function() {
-        console.log('Document ready. Loading categories and products...');
-        loadCategories();
-        loadProducts();
-
-        function loadCategories() {
-            $('#loading-categories').show();
-            console.log('Fetching categories from API...');
+        // Load categories
+        function loadCategories(retryCount = 0) {
+            $('#category-list').html('<p class="text-center">Loading categories...</p>'); // Show loading message
             $.ajax({
                 url: '/api/categories',
                 method: 'GET',
                 success: function(data) {
-                    console.log('Categories loaded:', data);
                     $('#category-list').empty().append(data.map(category => `
                         <div class="col-md-4">
-                            <div class="card h-100">
-                                <img src="${category.image || 'assets/img/card.jpg'}" class="card-img-top" alt="${category.name}">
+                            <div class="card category-card h-100 border-0 shadow-sm">
+                                <img src="${category.image || 'assets/img/product.png'}"
+                                     class="card-img-top" alt="${category.name}" style="height: 150px;">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">${category.name}</h5>
-                                    <a href="/categories/${category.id}" class="btn btn-outline-dark">View Products</a>
+                                    <p class="text-muted">${category.description}</p>
+                                    <a href="/categories/${category.id}" class="btn btn-outline-warning">Explore</a>
                                 </div>
                             </div>
                         </div>
                     `));
                 },
-                error: function(xhr) {
-                    console.error('Error loading categories:', xhr.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error loading categories',
-                        text: 'Failed to load categories. Please try again later.',
-                    });
-                },
-                complete: function() {
-                    $('#loading-categories').hide();
-                    console.log('Categories loading complete.');
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Failed to load categories:", textStatus, errorThrown);
+                    if (retryCount < 2) { // You may adjust the number of retries
+                        loadCategories(retryCount + 1); // Retry
+                    } else {
+                        $('#category-list').html('<p class="text-danger text-center">Failed to load categories. Please try again later.</p>');
+                    }
                 }
             });
         }
 
-        function loadProducts(sortOrder = 'latest') {
-            $('#loading-products').show();
-            console.log(`Fetching products from API with sort order: ${sortOrder}...`);
+        // Load products
+        function loadProducts(sortOrder = 'traditional', retryCount = 0) {
+            $('#product-list').html('<p class="text-center">Loading products...</p>'); // Show loading message
             $.ajax({
                 url: `/api/products?sort=${sortOrder}`,
                 method: 'GET',
                 success: function(data) {
-                    console.log('Products loaded:', data);
                     $('#product-list').empty().append(data.map(product => `
                         <div class="col-md-3">
-                            <div class="card h-100" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
-                                <div class="badge bg-danger position-absolute top-0 end-0 m-2">Sale</div>
-                                <img src="${product.image ||'assets/img/card.jpg'}" class="card-img-top" alt="${product.name}">
+                            <div class="card product-card h-100 border-0 shadow-sm">
+                                <div class="badge position-absolute top-0 end-0 m-2">Authentic</div>
+                                <img src="${product.image || 'assets/img/product.png'}"
+                                     class="card-img-top" alt="${product.name}" style="height: 150px;">
                                 <div class="card-body">
                                     <h5 class="card-title">${product.name}</h5>
+                                    <p class="text-muted small">${product.origin}</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <span class="text-muted text-decoration-line-through">$${(product.price * 1.25)}</span>
-                                            <span class="ms-2 fw-bold">$${product.price}</span>
-                                        </div>
-                                        <div class="text-warning">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
-                                        </div>
+                                        <span class="fw-bold">$${product.price}</span>
+                                        <button class="btn btn-warning btn-sm view-details">View Details</button>
                                     </div>
-                                    <button class="btn btn-dark w-100 mt-3 view-details">View Details</button>
                                 </div>
                             </div>
                         </div>
                     `));
                 },
-                error: function(xhr) {
-                    console.error('Error loading products:', xhr.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error loading products',
-                        text: 'Failed to load products. Please try again later.',
-                    });
-                },
-                complete: function() {
-                    $('#loading-products').hide();
-                    console.log('Products loading complete.');
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Failed to load products:", textStatus, errorThrown);
+                    if (retryCount < 2) { // You may adjust the number of retries
+                        loadProducts(sortOrder, retryCount + 1); // Retry
+                    } else {
+                        $('#product-list').html('<p class="text-danger text-center">Failed to load products. Please try again later.</p>');
+                    }
                 }
             });
         }
 
-        // Sort Products
-        $('#sort-options .dropdown-item').click(function(e) {
+        // Load new arrivals
+        function loadNewArrivals(retryCount = 0) {
+            $('#new-arrivals-list').html('<p class="text-center">Loading new arrivals...</p>'); // Show loading message
+            $.ajax({
+                url: '/api/products', // Hypothetical endpoint for new arrivals
+                method: 'GET',
+                success: function(data) {
+                    $('#new-arrivals-list').empty().append(data.map(product => `
+                        <div class="col-md-3">
+                            <div class="card product-card h-100 border-0 shadow-sm">
+                                <div class="badge position-absolute top-0 end-0 m-2">New</div>
+                                <img src="${product.image || 'assets/img/product.png'}"
+                                     class="card-img-top" alt="${product.name}" style ="height: 150px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.name}</h5>
+                                    <p class="text-muted">${product.description}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="fw-bold">$${product.price}</span>
+                                        <button class="btn btn-warning btn-sm view-details">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `));
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Failed to load new arrivals:", textStatus, errorThrown);
+                    if (retryCount < 2) { // You may adjust the number of retries
+                        loadNewArrivals(retryCount + 1); // Retry
+                    } else {
+                        $('#new-arrivals-list').html('<p class="text-danger text-center">Failed to load new arrivals. Please try again later.</p>');
+                    }
+                }
+            });
+        }
+
+        loadCategories();
+        loadProducts();
+        loadNewArrivals();
+
+        // Initialize sort order change
+        $('.dropdown-item').on('click', function(e) {
             e.preventDefault();
             const sortOrder = $(this).data('sort');
-            console.log(`Sort option selected: ${sortOrder}`);
             loadProducts(sortOrder);
-        });
-
-        // View Details Modal
-        $(document).on('click', '.view-details', function() {
-            const card = $(this).closest('.card');
-            const productId = card.data('id');
-            const productName = card.data('name');
-            const productPrice = card.data('price');
-
-            console.log(`Viewing details for product ID: ${productId}, Name: ${productName}, Price: $${productPrice}`);
-            $('#productModalLabel').text(productName);
-            $('#product-modal-body').html(`
-                <p><strong>Price:</strong> $${productPrice}</p>
-                <p><strong>Description:</strong> This is a detailed description of the product.</p>
-            `);
-            $('#productModal').modal('show');
-        });
-
-        // Add to Cart
-        $('#add-to-cart-btn').click(function() {
-            console.log('Product added to cart!');
-            alert('Product added to cart!');
-
-            // SweetAlert for adding to cart
-
         });
     });
 </script>

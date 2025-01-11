@@ -13,7 +13,7 @@
             <ul class="sidebar-nav list-unstyled">
                 <!-- Dashboard -->
                 <li class="nav-item mb-3">
-                    <a class="nav-link active d-flex align-items-center rounded p-2 text-dark hover-dark" href="{{ route('dashboard') }}">
+                    <a class="nav-link active d-flex align-items-center rounded p-2 text-dark hover-dark" href="">
                         <i class="bi bi-grid me-2"></i>
                         <span>Dashboard</span>
                     </a>
@@ -36,13 +36,13 @@
                     </a>
                     <ul id="user-nav" class="nav-content collapse list-unstyled ms-3 mt-2">
                         <li class="mb-2">
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('users.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-dot me-1"></i>
                                 <span>View All</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('users.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-plus-lg me-1"></i>
                                 <span>Add New</span>
                             </a>
@@ -62,13 +62,13 @@
                     </a>
                     <ul id="customer-nav" class="nav-content collapse list-unstyled ms-3 mt-2">
                         <li class="mb-2">
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('customers.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-dot me-1"></i>
                                 <span>View All</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('customers.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-plus-lg me-1"></i>
                                 <span>Add New</span>
                             </a>
@@ -93,13 +93,13 @@
                     </a>
                     <ul id="product-nav" class="nav-content collapse list-unstyled ms-3 mt-2">
                         <li class="mb-2">
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('products.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-dot me-1"></i>
                                 <span>View All</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('products.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-plus-lg me-1"></i>
                                 <span>Add New</span>
                             </a>
@@ -119,19 +119,19 @@
                     </a>
                     <ul id="stock-nav" class="nav-content collapse list-unstyled ms-3 mt-2">
                         <li class="mb-2">
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('stocks.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-dot me-1"></i>
                                 <span>Inventory</span>
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('stocks.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-exclamation-triangle me-1"></i>
                                 <span>Low Stock Alerts</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('stocks.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-arrow-left-right me-1"></i>
                                 <span>Stock Movement</span>
                             </a>
@@ -151,13 +151,13 @@
                     </a>
                     <ul id="sale-nav" class="nav-content collapse list-unstyled ms-3 mt-2">
                         <li class="mb-2">
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('sales.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-dot me-1"></i>
                                 <span>View All</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('sales.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-plus-lg me-1"></i>
                                 <span>Add New</span>
                             </a>
@@ -182,13 +182,13 @@
                     </a>
                     <ul id="expense-nav" class="nav-content collapse list-unstyled ms-3 mt-2">
                         <li class="mb-2">
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('expenses.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-dot me-1"></i>
                                 <span>View All</span>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="{{ route('expenses.index') }}">
+                            <a class="nav-link-sub d-flex align-items-center rounded-pill px-3 py-2 text-dark hover-dark" href="">
                                 <i class="bi bi-plus-lg me-1"></i>
                                 <span>Add New</span>
                             </a>
