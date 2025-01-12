@@ -21,6 +21,7 @@
 
     .hero-section img {
         object-fit: cover;
+        height: 100%;
     }
 
     .category-card {
@@ -55,7 +56,7 @@
     <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="assets/img/banner-image-2.jpg" class="d-block w-100 h-100" alt="African Marketplace">
+                <img src="assets/img/im5 (1).jpg" class="d-block w-100 h-100" alt="African Marketplace">
                 <div class="carousel-caption text-start">
                     <h1 class="display-3 fw-bold">Discover Africa's Finest</h1>
                     <p class="lead">Authentic African products crafted with tradition and love</p>
@@ -63,7 +64,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="assets/img/banner-image-2.jpg" class="d-block w-100 h-100" alt="African Artisans">
+                <img src="assets/img/im5 (2).jpg" class="d-block w-100 h-100" alt="African Artisans">
                 <div class="carousel-caption text-start">
                     <h1 class="display-3 fw-bold">Support African Artisans</h1>
                     <p class="lead">Each purchase empowers local craftspeople</p>
@@ -79,6 +80,19 @@
         </button>
     </div>
 </section>
+
+<style>
+    .hero-section {
+        height: 100vh; /* Set the height of the hero section */
+        overflow: hidden; /* Hide overflow if needed */
+    }
+
+    .carousel-item img {
+        height: 100%; /* Set image height to 100% of the carousel item */
+        object-fit: cover; /* Cover the area while maintaining aspect ratio */
+    }
+</style>
+
 
 <!-- Featured Categories -->
 <section class="py-5">
@@ -140,7 +154,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body text-center">
-                        <img src="assets\img\customer.jpg" class="rounded-circle mb-3" width="80" height="80" alt="Customer">
+                        <img src="assets/img/im5 (1).jpg" class="rounded-circle mb-3" width="80" height="80" alt="Customer">
                         <p class="mb-3">"Shopping here supports artisans, and the products are truly unique!"</p>
                         <footer class="text-muted">- Fatima S., Nigeria</footer>
                     </div>
@@ -220,9 +234,9 @@
                 method: 'GET',
                 success: function(data) {
                     $('#category-list').empty().append(data.map(category => `
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card category-card h-100 border-0 shadow-sm">
-                                <img src="${category.image || 'assets/img/product.png'}"
+                                <img src="${category.image || 'assets\img\im5 (4).jpg'}"
                                      class="card-img-top" alt="${category.name}" style="height: 150px;">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">${category.name}</h5>
@@ -245,40 +259,37 @@
         }
 
         // Load products
-        function loadProducts(sortOrder = 'traditional', retryCount = 0) {
-            $('#product-list').html('<p class="text-center">Loading products...</p>'); // Show loading message
-            $.ajax({
-                url: `/api/products?sort=${sortOrder}`,
-                method: 'GET',
-                success: function(data) {
-                    $('#product-list').empty().append(data.map(product => `
-                        <div class="col-md-3">
-                            <div class="card product-card h-100 border-0 shadow-sm">
-                                <div class="badge position-absolute top-0 end-0 m-2">Authentic</div>
-                                <img src="${product.image || 'assets/img/product.png'}"
-                                     class="card-img-top" alt="${product.name}" style="height: 150px;">
-                                <div class="card-body">
-                                    <h5 class="card-title">${product.name}</h5>
-                                    <p class="text-muted small">${product.origin}</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="fw-bold">$${product.price}</span>
-                                        <button class="btn btn-warning btn-sm view-details">View Details</button>
-                                    </div>
-                                </div>
+        function loadProducts() {
+    $('#product-list').html('<p class="text-center">Loading products...</p>'); // Show loading message
+    $.ajax({
+        url: `/api/products`, // Fetch all products
+        method: 'GET',
+        success: function(data) {
+            $('#product-list').empty().append(data.slice(0, 4).map(product => `
+                <div class="col-md-3">
+                    <div class="card product-card h-100 border-0 shadow-sm">
+                        <div class="badge position-absolute top-0 end-0 m-2">Authentic</div>
+                        <img src="${product.image || 'assets/img/handprod.jpg'}"
+                             class="card-img-top" alt="${product.name}" style="height: 150px;">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="text-muted small">${product.origin}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold">$${product.price}</span>
+                                <button class="btn btn-warning btn-sm view-details">View Details</button>
                             </div>
                         </div>
-                    `));
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error("Failed to load products:", textStatus, errorThrown);
-                    if (retryCount < 2) { // You may adjust the number of retries
-                        loadProducts(sortOrder, retryCount + 1); // Retry
-                    } else {
-                        $('#product-list').html('<p class="text-danger text-center">Failed to load products. Please try again later.</p>');
-                    }
-                }
-            });
+                    </div>
+                </div>
+            `));
+        },
+        error: function() {
+            $('#product-list').html('<p class="text-danger text-center">Failed to load products. Please try again later.</p>');
         }
+    });
+}
+
+
 
         // Load new arrivals
         function loadNewArrivals(retryCount = 0) {
@@ -291,7 +302,7 @@
                         <div class="col-md-3">
                             <div class="card product-card h-100 border-0 shadow-sm">
                                 <div class="badge position-absolute top-0 end-0 m-2">New</div>
-                                <img src="${product.image || 'assets/img/product.png'}"
+                                <img src="${product.image || 'assets\img\handprod.jpg'}"
                                      class="card-img-top" alt="${product.name}" style ="height: 150px;">
                                 <div class="card-body">
                                     <h5 class="card-title">${product.name}</h5>
