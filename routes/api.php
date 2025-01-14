@@ -20,6 +20,9 @@ use App\Http\Controllers\admin\api\ProductImageController;
 |--------------------------------------------------------------------------
 */
 
+Route::post('login', [AuthentController::class, 'login']);
+Route::middleware('auth:sanctum')->post('logout', [AuthentController::class, 'logout']);
+
 // Authentication
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);

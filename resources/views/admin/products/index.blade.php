@@ -107,49 +107,55 @@ document.addEventListener('DOMContentLoaded', function () {
             messageDiv.fadeOut(300);
         }, 5000);
     }
-
     function initializeDataTable() {
-        return $('#product-table').DataTable({
-    ajax: {
-        url: '/api/products', // API endpoint
-        dataSrc: 'data', // Use 'data' if the JSON response wraps data in a "data" key
-        error: function(xhr, error, thrown) {
-            console.error('DataTable Ajax Error:', error, thrown);
-            showGlobalMessage('Failed to load products. Please refresh the page.', 'danger');
-        }
-    },
-    columns: [
-        { data: 'id' },
-        { data: 'name' },
-        { data: 'description' },
-        { data: 'price' },
-        { data: 'category.name' }, // Access category name
-        {
-            data: null,
-            render: function(data) {
-                return `
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-sm btn-info edit-product" data-id="${data.id}" title="Edit Product">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger delete-product" data-id="${data.id}" title="Delete Product">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
+    return $('#product-table').DataTable({
+        ajax: {
+            url: '/api/products',
+            dataSrc: 'products.data', // Accessing the 'data' array within 'products'
+            error: function(xhr, error, thrown) {
+                console.error('DataTable Ajax Error:', error, thrown);
+                showGlobalMessage('Failed to load products. Please refresh the page.', 'danger');
             }
+        },
+        columns: [
+            { data: 'id' },
+            { data: 'name' },
+            { data: 'price' },
+            { data: 'stock' }, // Adding stock column
+            { data: 'created_at', render: function(data) {
+                return new Date(data).toLocaleDateString(); // Formatting date
+            }},
+            { data: 'updated_at', render: function(data) {
+                return data ? new Date(data).toLocaleDateString() : 'N/A'; // Formatting date or showing 'N/A'
+            }},
+            { data: 'category.name' }, // Accessing category name
+            {
+                data: null,
+                render: function(data) {
+                    return `
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-sm btn-info edit-product" data-id="${data.id}" title="Edit Product">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-product" data-id="${data.id}" title="Delete Product">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+        ],
+        responsive: true,
+        processing: true,
+        language: {
+            processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>',
+            emptyTable: 'No products found',
+            zeroRecords: 'No matching products found'
         }
-    ],
-    responsive: true,
-    processing: true,
-    language: {
-        processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>',
-        emptyTable: 'No products found',
-        zeroRecords: 'No matching products found'
-    }
-});
+    });
+}
 
-    }
+
 
     // Reset form function
     function resetForm() {

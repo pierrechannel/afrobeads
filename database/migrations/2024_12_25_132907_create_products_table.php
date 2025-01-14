@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained(); // Relationship to categories
-            $table->string('name');
-            $table->decimal('price', 10, 2);
-            $table->string('image')->nullable();
-            $table->integer('stock')->default(0);
+            $table->foreignId('category_id')->constrained()->onDelete('cascade'); // Foreign key referencing categories
+            $table->string('name'); // Name of the product
+            $table->text('description')->nullable(); // Description of the product
+            $table->decimal('base_price', 10, 2); // Base price of the product
+            $table->string('brand')->nullable(); // Brand of the product
+            $table->string('gender')->nullable(); // Intended gender for the product (e.g., male, female, unisex)
             $table->timestamps();
         });
     }

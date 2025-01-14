@@ -2,64 +2,81 @@
 
 namespace App\Http\Controllers\admin\api;
 
-use App\Http\Controllers\Controller;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+
+
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Product::with(['category', 'variants', 'images']);
+
+        // Filter by category
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Filter by gender
+        if ($request->has('gender')) {
+            $query->where('gender', $request->gender);
+        }
+
+        // Search by name
+        if ($request->has('search')) {
+            $query->where('name', 'LIKE', '%' . $request->search . '%');
+        }
+
+        // Sort products
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        return response()->json([
+            'products' => $query->paginate(12)
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        $product = Product::with([
+            'category',
+            'variants' => function($query) {
+                $query->where('stock_quantity', '>', 0);
+            },
+            'images'
+        ])->findOrFail($id);
+
+        return response()->json([
+            'product' => $product
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'base_price' => 'required|numeric|min:0',
+            'brand' => 'required|string|max:100',
+            'gender' => 'required|in:men,women,unisex'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $product = Product::create($validated);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        // Handle variants
+        if ($request->has('variants')) {
+            foreach ($request->variants as $variant) {
+                $product->variants()->create($variant);
+            }
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'message' => 'Product created successfully',
+            'product' => $product->load('variants')
+        ], 201);
     }
 }
