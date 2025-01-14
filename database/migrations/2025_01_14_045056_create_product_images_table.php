@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('product_images', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('image')->nullable(); // For category images
-            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade'); // Foreign key for parent category
+            $table->foreignId('product_id')->constrained()->onDelete('cascade'); // Foreign key referencing products
+            $table->string('image_url'); // URL to the product image
+            $table->boolean('is_primary')->default(false); // Flag to indicate if the image is the primary image
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('product_images');
     }
 };

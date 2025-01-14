@@ -1,6 +1,10 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
+<link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+
+
 <div class="container mt-4">
     <div class="card shadow-lg">
         <div class="card-body">
@@ -11,23 +15,26 @@
 
             <div id="globalMessage" class="alert alert-info" style="display:none;"></div>
 
-            <table class="table table-bordered table-striped table-hover" id="product-table">
-                <thead class="table-primary">
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Category</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows will be populated dynamically -->
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover mb-0" id="product-table">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+
 
     <!-- Product Modal -->
     <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
@@ -83,6 +90,8 @@
 @endsection
 
 @section('scripts')
+<script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const productTable = initializeDataTable();
@@ -101,44 +110,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initializeDataTable() {
         return $('#product-table').DataTable({
-            ajax: {
-                url: '/api/products', // API endpoint for fetching products
-                dataSrc: '',
-                error: function(xhr, error, thrown) {
-                    console.error('DataTable Ajax Error:', error, thrown);
-                    showGlobalMessage('Failed to load products. Please refresh the page.', 'danger');
-                }
-            },
-            columns: [
-                { data: 'id' },
-                { data: 'name' },
-                { data: 'description' },
-                { data: 'price' },
-                { data: 'category' }, // Access category name through the relationship
-                {
-                    data: null,
-                    render: function(data) {
-                        return `
-                            <div class="btn-group" role="group">
-                                <button class="btn btn-sm btn-info edit-product" data-id="${data.id}" title="Edit Product">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger delete-product" data-id="${data.id}" title="Delete Product">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        `;
-                    }
-                }
-            ],
-            responsive: true,
-            processing: true,
-            language: {
-                processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>',
-                emptyTable: 'No products found',
-                zeroRecords: 'No matching products found'
+    ajax: {
+        url: '/api/products', // API endpoint
+        dataSrc: 'data', // Use 'data' if the JSON response wraps data in a "data" key
+        error: function(xhr, error, thrown) {
+            console.error('DataTable Ajax Error:', error, thrown);
+            showGlobalMessage('Failed to load products. Please refresh the page.', 'danger');
+        }
+    },
+    columns: [
+        { data: 'id' },
+        { data: 'name' },
+        { data: 'description' },
+        { data: 'price' },
+        { data: 'category.name' }, // Access category name
+        {
+            data: null,
+            render: function(data) {
+                return `
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-sm btn-info edit-product" data-id="${data.id}" title="Edit Product">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger delete-product" data-id="${data.id}" title="Delete Product">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
             }
-        });
+        }
+    ],
+    responsive: true,
+    processing: true,
+    language: {
+        processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>',
+        emptyTable: 'No products found',
+        zeroRecords: 'No matching products found'
+    }
+});
+
     }
 
     // Reset form function

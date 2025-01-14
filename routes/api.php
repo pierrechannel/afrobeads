@@ -1,36 +1,145 @@
 <?php
 
-use Illuminate\Http\Request;
+
+// routes/api.php
+
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\ProductController;
-
-
-Route::apiResource('categories', CategoryController::class);
-Route::apiResource('products', ProductController::class);
+use App\Http\Controllers\admin\api\AuthController;
+use App\Http\Controllers\admin\api\UserController;
+use App\Http\Controllers\admin\api\CategoryController;
+use App\Http\Controllers\admin\api\ProductController;
+use App\Http\Controllers\admin\api\ProductVariantController;
+use App\Http\Controllers\admin\api\CartController;
+use App\Http\Controllers\admin\api\OrderController;
+use App\Http\Controllers\admin\api\AddressController;
+use App\Http\Controllers\admin\api\ProductImageController;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| Public Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Authentication
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('reset-password', [AuthController::class, 'resetPassword']);
+
+// Public Product Routes
+Route::get('products', [ProductController::class, 'index']);
+Route::get('products/{product}', [ProductController::class, 'show']);
+Route::get('products/{product}/variants', [ProductVariantController::class, 'index']);
+
+// Categories
+Route::get('categories', [CategoryController::class, 'index']);
+Route::get('categories/{category}', [CategoryController::class, 'show']);
+
+/*
+|--------------------------------------------------------------------------
+| Protected Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Auth
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('verify-email/{id}/{hash}', [AuthController::class, 'verifyEmail'])
+        ->name('verification.verify');
+    Route::post('email/verification-notification', [AuthController::class, 'resendVerificationEmail'])
+        ->name('verification.send');
+
+    // User Profile
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [UserController::class, 'profile']);
+        Route::put('/', [UserController::class, 'updateProfile']);
+        Route::put('/password', [UserController::class, 'updatePassword']);
+    });
+
+    // Addresses
+    Route::prefix('addresses')->group(function () {
+        Route::get('/', [AddressController::class, 'index']);
+        Route::post('/', [AddressController::class, 'store']);
+        Route::get('/{address}', [AddressController::class, 'show']);
+        Route::put('/{address}', [AddressController::class, 'update']);
+        Route::delete('/{address}', [AddressController::class, 'destroy']);
+        Route::put('/{address}/make-default', [AddressController::class, 'makeDefault']);
+    });
+
+    // Cart
+    Route::prefix('cart')->group(function () {
+        Route::get('/', [CartController::class, 'index']);
+        Route::post('/add', [CartController::class, 'addToCart']);
+        Route::put('/{cart}', [CartController::class, 'updateQuantity']);
+        Route::delete('/{cart}', [CartController::class, 'destroy']);
+        Route::post('/clear', [CartController::class, 'clearCart']);
+        Route::get('/count', [CartController::class, 'getCartCount']);
+        Route::get('/total', [CartController::class, 'getCartTotal']);
+    });
+
+    // Orders
+    Route::prefix('orders')->group(function () {
+        Route::get('/', [OrderController::class, 'index']);
+        Route::post('/', [OrderController::class, 'store']);
+        Route::get('/{order}', [OrderController::class, 'show']);
+        Route::put('/{order}/cancel', [OrderController::class, 'cancel']);
+        Route::get('/{order}/track', [OrderController::class, 'trackOrder']);
+        Route::post('/{order}/review', [OrderController::class, 'addReview']);
+    });
 });
 
-use App\Http\Controllers\Api\CartController;
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
 
-// API Routes for Cart
-//Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('api.cart.add');
-    Route::get('/cart', [CartController::class, 'getCart'])->name('api.cart.index');
-    Route::post('/cart/update', [CartController::class, 'updateCart'])->name('api.cart.update');
-    Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('api.cart.remove');
-//});
+Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
+    // Categories Management
+    Route::prefix('categories')->group(function () {
+        Route::post('/', [CategoryController::class, 'store']);
+        Route::put('/{category}', [CategoryController::class, 'update']);
+        Route::delete('/{category}', [CategoryController::class, 'destroy']);
+    });
+
+    // Products Management
+    Route::prefix('products')->group(function () {
+        Route::post('/', [ProductController::class, 'store']);
+        Route::put('/{product}', [ProductController::class, 'update']);
+        Route::delete('/{product}', [ProductController::class, 'destroy']);
+        Route::post('/{product}/variants', [ProductVariantController::class, 'store']);
+        Route::put('/variants/{variant}', [ProductVariantController::class, 'update']);
+        Route::delete('/variants/{variant}', [ProductVariantController::class, 'destroy']);
+    });
+
+    // Product Images
+    Route::prefix('products/{product}/images')->group(function () {
+        Route::post('/', [ProductImageController::class, 'store']);
+        Route::delete('/{image}', [ProductImageController::class, 'destroy']);
+        Route::post('/{image}/make-primary', [ProductImageController::class, 'makePrimary']);
+        Route::post('/reorder', [ProductImageController::class, 'reorder']);
+    });
+
+    // Orders Management
+    Route::prefix('orders')->group(function () {
+        Route::get('/', [OrderController::class, 'adminIndex']);
+        Route::put('/{order}/status', [OrderController::class, 'updateStatus']);
+        Route::get('/export', [OrderController::class, 'export']);
+        Route::get('/statistics', [OrderController::class, 'getStatistics']);
+    });
+
+    // Users Management
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::get('/{user}', [UserController::class, 'show']);
+        Route::put('/{user}', [UserController::class, 'update']);
+        Route::delete('/{user}', [UserController::class, 'destroy']);
+        Route::put('/{user}/status', [UserController::class, 'updateStatus']);
+    });
+});
+
+// Webhooks (if needed)
+Route::prefix('webhooks')->group(function () {
+    Route::post('payment/stripe', [WebhookController::class, 'handleStripeWebhook']);
+    Route::post('shipping/update', [WebhookController::class, 'handleShippingUpdate']);
+});

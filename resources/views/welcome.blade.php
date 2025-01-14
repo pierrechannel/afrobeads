@@ -298,7 +298,7 @@
                 url: '/api/products', // Hypothetical endpoint for new arrivals
                 method: 'GET',
                 success: function(data) {
-                    $('#new-arrivals-list').empty().append(data.map(product => `
+                    $('#new-arrivals-list').empty().append(data.slice(0, 4).map(product => `
                         <div class="col-md-3">
                             <div class="card product-card h-100 border-0 shadow-sm">
                                 <div class="badge position-absolute top-0 end-0 m-2">New</div>

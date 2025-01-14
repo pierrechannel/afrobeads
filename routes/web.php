@@ -28,7 +28,7 @@ Route::get('/product', function () {
     return view('product');
 });
 Route::get('admin/product', function () {
-    return view('admin.product');
+    return view('admin.products.index');
 });
 Route::get('/product_details', function () {
     return view('product_details');
