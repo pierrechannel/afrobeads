@@ -27,9 +27,13 @@ Route::get('/', function () {
 Route::get('/product', function () {
     return view('product');
 });
-Route::get('admin/product', function () {
+Route::get('admin/products', function () {
     return view('admin.products.index');
 });
+
+Route::get('/admin/products/create', function () {
+    return view('admin.products.create');
+})->name('admin.products.create');
 
 Route::get('admin/category', function () {
     return view('admin.Category');
