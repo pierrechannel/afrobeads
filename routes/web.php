@@ -30,6 +30,10 @@ Route::get('/product', function () {
 Route::get('admin/product', function () {
     return view('admin.products.index');
 });
+
+Route::get('admin/category', function () {
+    return view('admin.Category');
+});
 Route::get('/product_details', function () {
     return view('product_details');
 });
