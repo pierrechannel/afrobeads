@@ -21,8 +21,10 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Description</th>
                             <th>Price</th>
+                            <th>Stock</th>
+                            <th>Date Création</th>
+                            <th>Date MODIFICATION</th>
                             <th>Category</th>
                             <th>Actions</th>
                         </tr>
