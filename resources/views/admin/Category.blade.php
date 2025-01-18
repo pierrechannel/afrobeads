@@ -20,6 +20,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Descrpition</th>
                             <th>Image</th>
                             <th>Actions</th>
                         </tr>
@@ -108,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
             columns: [
                 { data: 'id' },
                 { data: 'name' },
+                { data: 'description' },
                 { data: 'image', render: function(data) {
                     return data ? `<img src="/storage/${data}" alt="${data}" style="width: 50px; height: 50px;"/>` : 'No Image';
                 }},

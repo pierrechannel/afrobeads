@@ -2,8 +2,7 @@
 
 @section('content')
 <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-
+<link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
 
 <div class="container mt-4">
     <div class="card shadow-lg">
@@ -23,8 +22,8 @@
                             <th>Name</th>
                             <th>Price</th>
                             <th>Stock</th>
-                            <th>Date Création</th>
-                            <th>Date MODIFICATION</th>
+                            <th>Date Created</th>
+                            <th>Date Modified</th>
                             <th>Category</th>
                             <th>Actions</th>
                         </tr>
@@ -37,7 +36,6 @@
         </div>
     </div>
 
-
     <!-- Product Modal -->
     <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -49,7 +47,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="productForm" novalidate>
+                    <form id="productForm" novalidate enctype="multipart/form-data">
                         <input type="hidden" id="productId" name="productId">
                         <div class="mb-3">
                             <label for="name" class="form-label">Product Name</label>
@@ -73,6 +71,16 @@
                                 <!-- Categories will be populated dynamically -->
                             </select>
                             <div class="invalid-feedback">Please select a category.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="images" class="form-label">Product Images</label>
+                            <input type="file" class="form-control" id="images" name="images[]" multiple accept="image/*">
+                            <div class="invalid-feedback">Please upload product images.</div>
+                        </div>
+                        <div id="variantsSection" class="mb-3">
+                            <label for="variants" class="form-label">Product Variants</label>
+                            <button type="button" class="btn btn-secondary" id="addVariantBtn">Add Variant</button>
+                            <div id="variantsContainer"></div>
                         </div>
                         <div id="errorMessages" class="alert alert-danger mt-3" style="display:none;"></div>
                     </form>
@@ -101,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const $productModal = $('#productModal');
     const $errorMessages = $('#errorMessages');
 
+    // Function to display global messages
     function showGlobalMessage(message, type = 'info') {
         const messageDiv = $('#globalMessage');
         messageDiv.removeClass('alert-info alert-success alert-danger')
@@ -109,55 +118,55 @@ document.addEventListener('DOMContentLoaded', function () {
             messageDiv.fadeOut(300);
         }, 5000);
     }
+
+    // Initialize DataTable
     function initializeDataTable() {
-    return $('#product-table').DataTable({
-        ajax: {
-            url: '/api/products',
-            dataSrc: 'products.data', // Accessing the 'data' array within 'products'
-            error: function(xhr, error, thrown) {
-                console.error('DataTable Ajax Error:', error, thrown);
-                showGlobalMessage('Failed to load products. Please refresh the page.', 'danger');
-            }
-        },
-        columns: [
-            { data: 'id' },
-            { data: 'name' },
-            { data: 'price' },
-            { data: 'stock' }, // Adding stock column
-            { data: 'created_at', render: function(data) {
-                return new Date(data).toLocaleDateString(); // Formatting date
-            }},
-            { data: 'updated_at', render: function(data) {
-                return data ? new Date(data).toLocaleDateString() : 'N/A'; // Formatting date or showing 'N/A'
-            }},
-            { data: 'category.name' }, // Accessing category name
-            {
-                data: null,
-                render: function(data) {
-                    return `
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-sm btn-info edit-product" data-id="${data.id}" title="Edit Product">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger delete-product" data-id="${data.id}" title="Delete Product">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    `;
+        return $('#product-table').DataTable({
+            ajax: {
+                url: '/api/products',
+                dataSrc: 'products.data', // Accessing the 'data' array within 'products'
+                error: function(xhr, error, thrown) {
+                    console.error('DataTable Ajax Error:', error, thrown);
+                    showGlobalMessage('Failed to load products. Please refresh the page.', 'danger');
                 }
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'name' },
+                { data: 'price' },
+                { data: 'stock' },
+                { data: 'created_at', render: function(data) {
+                    return new Date(data).toLocaleDateString(); // Formatting date
+                }},
+                { data: 'updated_at', render: function(data) {
+                    return data ? new Date(data).toLocaleDateString() : 'N/A'; // Formatting date or showing 'N/A'
+                }},
+                { data: 'category.name' }, // Accessing category name
+                {
+                    data: null,
+                    render: function(data) {
+                        return `
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-sm btn-info edit-product" data-id="${data.id}" title="Edit Product">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-product" data-id="${data.id}" title="Delete Product">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                    }
+                }
+            ],
+            responsive: true,
+            processing: true,
+            language: {
+                processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>',
+                emptyTable: 'No products found',
+                zeroRecords: 'No matching products found'
             }
-        ],
-        responsive: true,
-        processing: true,
-        language: {
-            processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>',
-            emptyTable: 'No products found',
-            zeroRecords: 'No matching products found'
-        }
-    });
-}
-
-
+        });
+    }
 
     // Reset form function
     function resetForm() {
@@ -167,17 +176,29 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#productId').val('');
         $('#productModalLabel').text('Create New Product');
         loadCategories();
+        $('#variantsContainer').empty(); // Clear variants
     }
 
     function loadCategories() {
-        $.get('/api/categories', function(data) {
-            const categorySelect = $('#category');
-            categorySelect.empty().append('<option value="">Select a category</option>');
-            data.forEach(category => {
-                categorySelect.append(`<option value="${category.id}">${category.name}</option>`);
-            });
+    $.get('/api/categories', function(data) {
+        const categorySelect = $('#category');
+        categorySelect.empty().append('<option value="">Select a category</option>');
+
+        // Iterate through the categories
+        data.categories.forEach(category => {
+            // Append the parent category
+            categorySelect.append(`<option value="${category.id}">${category.name}</option>`);
+
+            // Check for child categories
+            if (category.children && category.children.length > 0) {
+                category.children.forEach(child => {
+                    categorySelect.append(`<option value="${child.id}">-- ${child.name}</option>`);
+                });
+            }
         });
-    }
+    });
+}
+
 
     $('#addProductBtn').on('click', function() {
         resetForm();
@@ -195,6 +216,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#price').val(response.price);
                 $('#category').val(response.category_id);
 
+                // Load existing variants
+                loadVariants(response.variants);
+
                 $('#productModalLabel').text('Edit Product');
                 loadCategories();
 
@@ -204,6 +228,49 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Failed to fetch product data:', xhr);
                 showGlobalMessage('Error fetching product data.', 'danger');
             });
+    });
+
+    function loadVariants(variants) {
+        $('#variantsContainer').empty(); // Clear existing variants
+        variants.forEach(variant => {
+            addVariantRow(variant.size, variant.color, variant.sku, variant.stock_quantity, variant.price_adjustment);
+        });
+    }
+
+    function addVariantRow(size = '', color = '', sku = '', stock_quantity = 0, price_adjustment = 0) {
+        const variantRow = `
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Size" value="${size}" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Color" value="${color}" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="SKU" value="${sku}" required>
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" placeholder="Stock" value="${stock_quantity}" required min="0">
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" placeholder="Price Adjustment" value="${price_adjustment}" step="0.01">
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-danger remove-variant-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        $('#variantsContainer').append(variantRow);
+    }
+
+    $('#addVariantBtn').on('click', function() {
+        addVariantRow();
+    });
+
+    $('#variantsContainer').on('click', '.remove-variant-btn', function() {
+        $(this).closest('.row').remove();
     });
 
     $('#product-table').on('click', '.delete-product', function() {
@@ -234,18 +301,33 @@ document.addEventListener('DOMContentLoaded', function () {
         const productId = $('#productId').val();
         const method = productId ? 'PUT' : 'POST';
         const url = productId ? `/api/products/${productId}` : '/api/products';
-        const productData = {
-            name: $('#name').val().trim(),
-            description: $('#description').val().trim(),
-            price: $('#price').val().trim(),
-            category_id: $('#category').val()
-        };
+
+        const variants = [];
+        $('#variantsContainer .row').each(function() {
+            const size = $(this).find('input').eq(0).val().trim();
+            const color = $(this).find('input').eq(1).val().trim();
+            const sku = $(this).find('input').eq(2).val().trim();
+            const stock_quantity = $(this).find('input').eq(3).val().trim();
+            const price_adjustment = $(this).find('input').eq(4).val().trim();
+
+            variants.push({
+                size,
+                color,
+                sku,
+                stock_quantity,
+                price_adjustment: price_adjustment ? parseFloat(price_adjustment) : 0
+            });
+        });
+
+        const formData = new FormData($productForm[0]);
+        formData.append('variants', JSON.stringify(variants));
 
         $.ajax({
             url: url,
             method: method,
-            data: JSON.stringify(productData),
-            contentType: 'application/json',
+            data: formData,
+            contentType: false,
+            processData: false,
             success: function(response) {
                 productTable.ajax.reload();
                 $productModal.modal('hide');

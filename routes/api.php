@@ -29,14 +29,23 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
-// Public Product Routes
-Route::get('products', [ProductController::class, 'index']);
-Route::get('products/{product}', [ProductController::class, 'show']);
-Route::get('products/{product}/variants', [ProductVariantController::class, 'index']);
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductController::class, 'index']); // Get all products with optional filters
+    Route::get('/{id}', [ProductController::class, 'show']); // Get a specific product by ID
+    Route::post('/', [ProductController::class, 'store']); // Create a new product
+    Route::put('/{id}', [ProductController::class, 'update']); // Update an existing product
+    Route::delete('/{id}', [ProductController::class, 'destroy']); // Delete a product
+});
 
-// Categories
-Route::get('categories', [CategoryController::class, 'index']);
-Route::get('categories/{category}', [CategoryController::class, 'show']);
+
+// Routes pour les catégories
+Route::prefix('categories')->group(function () {
+    Route::get('/', [CategoryController::class, 'index']);           // Récupérer toutes les catégories
+    Route::post('/', [CategoryController::class, 'store']);          // Créer une nouvelle catégorie
+    Route::get('/{category}', [CategoryController::class, 'show']);   // Afficher une catégorie spécifique
+    Route::put('/{category}', [CategoryController::class, 'update']); // Mettre à jour une catégorie spécifique
+    Route::delete('/{category}', [CategoryController::class, 'destroy']); // Supprimer une catégorie spécifique
+});
 
 /*
 |--------------------------------------------------------------------------
