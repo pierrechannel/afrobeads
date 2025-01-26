@@ -1,8 +1,14 @@
+<!-- resources/views/products.blade.php -->
+
+<!-- Define the layout and sections -->
 @extends('layouts.app')
 
+<!-- Set the page title -->
 @section('title', 'Products')
 
+<!-- Define custom CSS styles -->
 @section('custom-styles')
+<!-- Add your custom CSS styles here -->
 <style>
     .filter-sidebar {
         background-color: #f8f9fa;
@@ -25,12 +31,18 @@
 </style>
 @endsection
 
+<!-- Define the page content -->
 @section('content')
+<!-- Include Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
+<!-- Include Font Awesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+<!-- Include SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.1.9/sweetalert2.min.css">
 
+<!-- Page content -->
 <div class="container my-5">
-    <!-- Page Header -->
+    <!-- Page header -->
     <div class="row mb-4">
         <div class="col">
             <h1>Our Products</h1>
@@ -43,8 +55,9 @@
         </div>
     </div>
 
+    <!-- Filter sidebar and product grid -->
     <div class="row">
-        <!-- Filter Sidebar -->
+        <!-- Filter sidebar -->
         <div class="col-lg-3 mb-4">
             <div class="filter-sidebar">
                 <h4 class="mb-3">Filters</h4>
@@ -53,11 +66,12 @@
                 <div class="mb-4">
                     <h5>Categories</h5>
                     <div class="form-check" id="category-filters">
+                        <!-- Load categories via AJAX -->
                         <div class="loading-indicator" id="loading-categories">Loading categories...</div>
                     </div>
                 </div>
 
-                <!-- Price Range -->
+                <!-- Price range -->
                 <div class="mb-4">
                     <h5>Price Range</h5>
                     <div class="price-range-inputs mb-3">
@@ -68,7 +82,7 @@
                     <button class="btn btn-sm btn-dark w-100" id="apply-price-filter">Apply</button>
                 </div>
 
-                <!-- Sort By -->
+                <!-- Sort by -->
                 <div class="mb-4">
                     <h5>Sort By</h5>
                     <select class="form-select" id="sort-select">
@@ -79,12 +93,12 @@
                     </select>
                 </div>
 
-                <!-- Clear Filters -->
+                <!-- Clear filters -->
                 <button class="btn btn-outline-dark w-100" id="clear-filters">Clear All Filters</button>
             </div>
         </div>
 
-        <!-- Product Grid -->
+        <!-- Product grid -->
         <div class="col-lg-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
@@ -113,7 +127,7 @@
     </div>
 </div>
 
-<!-- Product Quick View Modal -->
+<!-- Product quick view modal -->
 <div class="modal fade" id="productModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -144,15 +158,22 @@
         </div>
     </div>
 </div>
+
 @endsection
 
+<!-- Define custom JavaScript scripts -->
 @section('custom-scripts')
+<!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Bootstrap JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Include SweetAlert2 JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.1.9/sweetalert2.all.min.js"></script>
 
+<!-- JavaScript code for product listing page -->
 <script>
     $(document).ready(function() {
+        // Initialize variables
         let currentPage = 1;
         let currentFilters = {
             categories: [],
@@ -161,16 +182,21 @@
             sortBy: 'latest'
         };
 
-        // Initial load
+        // Load categories and products initially
         loadCategories();
         loadProducts();
 
+        // Function to load categories
         function loadCategories() {
+            // Show loading indicator
             $('#loading-categories').show();
+
+            // Make AJAX request to load categories
             $.ajax({
                 url: '/api/categories',
                 method: 'GET',
                 success: function(data) {
+                    // Generate category filters HTML
                     const categoryFilters = data.map(category => `
                         <div class="form-check">
                             <input class="form-check-input category-filter" type="checkbox" value="${category.id}" id="category-${category.id}">
@@ -179,9 +205,12 @@
                             </label>
                         </div>
                     `).join('');
+
+                    // Update category filters HTML
                     $('#category-filters').html(categoryFilters);
                 },
                 error: function() {
+                    // Show error message
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -189,13 +218,18 @@
                     });
                 },
                 complete: function() {
+                    // Hide loading indicator
                     $('#loading-categories').hide();
                 }
             });
         }
 
+        // Function to load products
         function loadProducts() {
+            // Show loading indicator
             $('#loading-products').show();
+
+            // Generate query parameters for AJAX request
             const queryParams = new URLSearchParams({
                 page: currentPage,
                 sort: currentFilters.sortBy,
@@ -204,10 +238,12 @@
                 ...currentFilters.categories.length && { categories: currentFilters.categories.join(',') }
             });
 
+            // Make AJAX request to load products
             $.ajax({
                 url: `/api/products?${queryParams}`,
                 method: 'GET',
                 success: function(response) {
+                    // Update product count and grid
                     const products = response.data;
                     $('#product-count').text(response.total);
 
@@ -238,9 +274,12 @@
                     `).join('');
 
                     $('#product-list').html(productHTML);
+
+                    // Update pagination
                     updatePagination(response.current_page, response.last_page);
                 },
                 error: function() {
+                    // Show error message
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -248,11 +287,13 @@
                     });
                 },
                 complete: function() {
+                    // Hide loading indicator
                     $('#loading-products').hide();
                 }
             });
         }
 
+        // Function to update pagination
         function updatePagination(currentPage, lastPage) {
             let pagination = '';
 
@@ -279,16 +320,19 @@
                 </li>
             `;
 
+            // Update pagination HTML
             $('#pagination').html(pagination);
         }
 
-        // Event Handlers
+        // Event handlers
         $('#sort-select').change(function() {
+            // Update sort by filter
             currentFilters.sortBy = $(this).val();
             loadProducts();
         });
 
         $(document).on('change', '.category-filter', function() {
+            // Update categories filter
             currentFilters.categories = $('.category-filter:checked').map(function() {
                 return $(this).val();
             }).get();
@@ -296,12 +340,14 @@
         });
 
         $('#apply-price-filter').click(function() {
+            // Update price range filter
             currentFilters.minPrice = $('#min-price').val() || null;
             currentFilters.maxPrice = $('#max-price').val() || null;
             loadProducts();
         });
 
         $('#clear-filters').click(function() {
+            // Clear all filters
             currentFilters = {
                 categories: [],
                 minPrice: null,
@@ -315,8 +361,8 @@
         });
 
         $(document).on('click', '.quick-view', function() {
+            // Show product details modal
             const productId = $(this).data('id');
-            // Fetch product details and show modal
             $.ajax({
                 url: `/api/products/${productId}`,
                 success: function(product) {
@@ -331,6 +377,7 @@
         });
 
         $('#modal-add-to-cart').click(function() {
+            // Add product to cart
             const quantity = $('#modal-quantity').val();
             Swal.fire({
                 icon: 'success',
@@ -344,6 +391,7 @@
 
         $(document).on('click', '.page-link', function(e) {
             e.preventDefault();
+            // Update current page
             currentPage = $(this).data('page');
             loadProducts();
         });

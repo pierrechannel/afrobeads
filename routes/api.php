@@ -78,16 +78,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{address}/make-default', [AddressController::class, 'makeDefault']);
     });
 
-    // Cart
-    Route::prefix('cart')->group(function () {
-        Route::get('/', [CartController::class, 'index']);
-        Route::post('/add', [CartController::class, 'addToCart']);
-        Route::put('/{cart}', [CartController::class, 'updateQuantity']);
-        Route::delete('/{cart}', [CartController::class, 'destroy']);
-        Route::post('/clear', [CartController::class, 'clearCart']);
-        Route::get('/count', [CartController::class, 'getCartCount']);
-        Route::get('/total', [CartController::class, 'getCartTotal']);
-    });
+
+
+// Guest routes
+Route::prefix('cart')->group(function () {
+    Route::post('/create-account', [CartController::class, 'createAccountAndMigrateCart']);
+});
 
     // Orders
     Route::prefix('orders')->group(function () {
@@ -155,3 +151,13 @@ Route::prefix('webhooks')->group(function () {
     Route::post('payment/stripe', [WebhookController::class, 'handleStripeWebhook']);
     Route::post('shipping/update', [WebhookController::class, 'handleShippingUpdate']);
 });
+
+// In routes/api.php
+//Route::middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('cart')->group(function () {
+        Route::get('/', [CartController::class, 'index']);
+        Route::post('/', [CartController::class, 'addToCart']);
+        Route::put('/{cart}', [CartController::class, 'updateQuantity']);
+        Route::delete('/{cart}', [CartController::class, 'destroy']);
+    });
+//});

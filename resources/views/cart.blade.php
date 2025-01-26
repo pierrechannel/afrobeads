@@ -3,59 +3,58 @@
 @section('title', 'Your Cart')
 
 @section('content')
-<!-- Include Bootstrap 5 CSS and JS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <style>
-.cart-item {
-    transition: all 0.3s ease;
-}
+    .cart-item {
+        transition: all 0.3s ease;
+    }
 
-.cart-item:hover {
-    background-color: #f8f9fa;
-}
+    .cart-item:hover {
+        background-color: #f8f9fa;
+    }
 
-.quantity-input {
-    width: 60px !important;
-}
+    .quantity-input {
+        width: 60px !important;
+    }
 
-.btn-quantity {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .btn-quantity {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.alert-floating {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1050;
-    min-width: 300px;
-}
+    .alert-floating {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1050;
+        min-width: 300px;
+    }
 
-.product-image {
-    object-fit: cover;
-    height: 120px;
-    width: 120px;
-}
+    .product-image {
+        object-fit: cover;
+        height: 120px;
+        width: 120px;
+    }
 
-.order-summary {
-    position: sticky;
-    top: 20px;
-}
+    .order-summary {
+        position: sticky;
+        top: 20px;
+    }
 
-.fade-enter {
-    animation: fadeIn 0.3s ease-in;
-}
+    .fade-enter {
+        animation: fadeIn 0.3s ease-in;
+    }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 </style>
 
 <main class="container py-5">
@@ -67,12 +66,10 @@
     </div>
 
     <div class="row g-4">
-        <!-- Cart Items Section -->
         <div class="col-lg-8">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <div id="cart-items" class="list-group list-group-flush">
-                        <!-- Cart items will be loaded dynamically here -->
                         <div class="p-4 text-center">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -96,7 +93,6 @@
             </div>
         </div>
 
-        <!-- Order Summary Section -->
         <div class="col-lg-4">
             <div class="card shadow-sm order-summary">
                 <div class="card-body">
@@ -125,111 +121,133 @@
         </div>
     </div>
 
-    <!-- Alert area for messages -->
     <div id="alertArea" class="alert-floating"></div>
 </main>
 
-<!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     $(document).ready(function() {
         function updateCart() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let cartHtml = '';
-            let total = 0;
+            $.get('/api/cart', function(response) {
+                let cartHtml = '';
+                let total = 0;
 
-            if (cart.length === 0) {
-                cartHtml = `
-                    <div class="text-center py-5">
-                        <i class="bi bi-cart-x display-1 text-muted mb-4"></i>
-                        <h4 class="text-muted">Your cart is empty</h4>
-                        <p class="mb-4">Looks like you haven't added any items yet.</p>
-                        <a href="/shop" class="btn btn-primary">Continue Shopping</a>
-                    </div>`;
-            } else {
-                cart.forEach(item => {
-                    const itemTotal = item.price * item.quantity;
-                    total += itemTotal;
-                    cartHtml += `
-                        <div class="cart-item list-group-item py-3">
-                            <div class="row align-items-center">
-                                <div class="col-md-2">
-                                    <img src="${item.image || 'assets/img/card.jpg'}" alt="${item.name}"
-                                         class="product-image rounded">
-                                </div>
-                                <div class="col-md-4">
-                                    <h5 class="mb-1">${item.name}</h5>
-                                    <p class="text-muted mb-0">Price: $${item.price}</p>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group">
-                                        <button class="btn btn-outline-secondary btn-quantity update-quantity"
-                                                data-id="${item.id}" data-change="-1">−</button>
-                                        <input type="number" class="form-control quantity-input text-center"
-                                               value="${item.quantity}" min="1" data-id="${item.id}">
-                                        <button class="btn btn-outline-secondary btn-quantity update-quantity"
-                                                data-id="${item.id}" data-change="1">+</button>
+                if (response.cart_items.length === 0) {
+                    cartHtml = `
+                        <div class="text-center py-5">
+                            <i class="bi bi-cart-x display-1 text-muted mb-4"></i>
+                            <h4 class="text-muted">Your cart is empty</h4>
+                            <p class="mb-4">Looks like you haven't added any items yet.</p>
+                            <a href="/shop" class="btn btn-primary">Continue Shopping</a>
+                        </div>`;
+                } else {
+                    response.cart_items.forEach(item => {
+                        const itemTotal = item.variant.getFinalPriceAttribute * item.quantity;
+                        total += itemTotal;
+                        cartHtml += `
+                            <div class="cart-item list-group-item py-3">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2">
+                                        <img src="${item.variant.product.images[0] || 'assets/img/card.jpg'}" alt="${item.variant.product.name}"
+                                             class="product-image rounded">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5 class="mb-1">${item.variant.product.name}</h5>
+                                        <p class="text-muted mb-0">Price: $${item.variant.getFinalPriceAttribute}</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                            <button class="btn btn-outline-secondary btn-quantity update-quantity"
+                                                    data-id="${item.id}" data-change="-1">−</button>
+                                            <input type="number" class="form-control quantity-input text-center"
+                                                   value="${item.quantity}" min="1" data-id="${item.id}">
+                                            <button class="btn btn-outline-secondary btn-quantity update-quantity"
+                                                    data-id="${item.id}" data-change="1">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 text-end">
+                                        <h5 class="mb-0">$${itemTotal}</h5>
+                                    </div>
+                                    <div class="col-md-1 text-end">
+                                        <button class="btn btn-link text-danger remove-item p-0" data-id="${item.id}">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-md-2 text-end">
-                                    <h5 class="mb-0">$${itemTotal}</h5>
-                                </div>
-                                <div class="col-md-1 text-end">
-                                    <button class="btn btn-link text-danger remove-item p-0" data-id="${item.id}">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>`;
-                });
-            }
+                            </div>`;
+                    });
+                }
 
-            $('#cart-items').html(cartHtml);
-            $('#cartTotal, #subtotal').text(`$${total}`);
+                $('#cart-items').html(cartHtml);
+                $('#cartTotal, #subtotal').text(`$${total.toFixed(2)}`);
+            });
         }
 
         // Update Quantity
         $(document).on('click', '.update-quantity', function() {
             const itemId = $(this).data('id');
             const change = parseInt($(this).data('change'));
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const item = cart.find(i => i.id === itemId);
-            if (item) {
-                item.quantity += change;
-                if (item.quantity < 1) item.quantity = 1;
+            const inputField = $(this).closest('.input-group').find('.quantity-input');
+            const newQuantity = parseInt(inputField.val()) + change;
+
+            if (newQuantity > 0) {
+                $.ajax({
+                    url: `/api/cart/${itemId}`,
+                    method: 'PUT',
+                    data: { quantity: newQuantity },
+                    success: function() {
+                        updateCart();
+                    },
+                    error: function() {
+                        showAlert("Failed to update item quantity", "error");
+                    }
+                });
             }
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCart();
         });
 
         // Remove Item
         $(document).on('click', '.remove-item', function() {
             const itemId = $(this).data('id');
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart = cart.filter(i => i.id !== itemId);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCart();
-            showAlert("Item removed from cart", "success");
+            $.ajax({
+                url: `/api/cart/${itemId}`,
+                method: 'DELETE',
+                success: function() {
+                    updateCart();
+                    showAlert("Item removed from cart", "success");
+                },
+                error: function() {
+                    showAlert("Failed to remove item from cart", "error");
+                }
+            });
         });
 
         // Clear Cart
         $('#clearCartButton').on('click', function() {
             if (confirm('Are you sure you want to clear your cart?')) {
-                localStorage.removeItem('cart');
-                updateCart();
-                showAlert("Cart cleared", "success");
+                $.ajax({
+                    url: `/api/cart`,
+                    method: 'DELETE',
+                    success: function() {
+                        updateCart();
+                        showAlert("Cart cleared", "success");
+                    },
+                    error: function() {
+                        showAlert("Failed to clear cart", "error");
+                    }
+                });
             }
         });
 
         // Checkout
         $('#checkoutButton').on('click', function() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            if (cart.length === 0) {
-                showAlert("Your cart is empty", "error");
-                return;
-            }
-            window.location.href = '/checkout';
+            $.get('/api/cart', function(response) {
+                if (response.cart_items.length === 0) {
+                    showAlert("Your cart is empty", "error");
+                } else {
+                    window.location.href = '/checkout';
+                }
+            });
         });
 
         // Display Alerts
